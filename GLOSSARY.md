@@ -1,6 +1,6 @@
-# Animation Motion Vocabulary
+# Animation Motion Vocabulary — Glossary
 
-This is the standalone Markdown version of the animation vocabulary. The installable Codex skill is in `animation-motion-vocabulary/`.
+Human-readable reference for all terms in this vocabulary. The installable agent skill is in `animation-motion-vocabulary/`. The agent's version of this glossary (with a table of contents and phrase maps) is at `animation-motion-vocabulary/references/animation-motion-vocabulary.md`.
 
 Core vocabulary source: [Animation Vocabulary](https://animations.dev/vocabulary) by Emil Kowalski. This version adapts it for AI agent use with additional matching and implementation guidance.
 

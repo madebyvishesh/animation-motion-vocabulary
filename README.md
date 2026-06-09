@@ -244,7 +244,7 @@ For curl installs, rerun the same command you used originally.
 ├── SECURITY.md
 ├── install.sh
 ├── install.ps1
-├── animation-motion-vocabulary.md        ← standalone human-readable glossary
+├── GLOSSARY.md                           ← human-readable vocabulary reference
 └── animation-motion-vocabulary/          ← the skill folder agents load
     ├── SKILL.md                          ← agent entry point
     ├── agents/
