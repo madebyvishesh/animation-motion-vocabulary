@@ -1,0 +1,4 @@
+interface:
+  display_name: "Animation Motion Vocabulary"
+  short_description: "Recognize and apply UI animation terms"
+  default_prompt: "Use $animation-motion-vocabulary to turn vague motion feedback into precise animation terms and implementation guidance."

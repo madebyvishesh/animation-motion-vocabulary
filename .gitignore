@@ -1,0 +1,7 @@
+.DS_Store
+._*
+.validation-venv/
+node_modules/
+dist/
+build/
+*.log
