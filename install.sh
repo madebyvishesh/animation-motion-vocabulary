@@ -28,8 +28,8 @@ Usage:
   ./install.sh custom /path/to/skills
 
 Remote install:
-  curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/main/install.sh | bash -s -- codex
-  curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/main/install.sh | bash -s -- claude
+  curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- codex
+  curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- claude
 
 Installs the animation-motion-vocabulary skill by copying:
   animation-motion-vocabulary/

@@ -19,25 +19,25 @@ The core vocabulary comes from [Animation Vocabulary](https://animations.dev/voc
 Codex:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/main/install.sh | bash -s -- codex
+curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- codex
 ```
 
 Claude Code:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/main/install.sh | bash -s -- claude
+curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- claude
 ```
 
 Both:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/main/install.sh | bash -s -- all
+curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- all
 ```
 
 Custom skills directory:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/main/install.sh | bash -s -- custom /path/to/skills
+curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- custom /path/to/skills
 ```
 
 The installer copies the skill folder into the selected skills directory. It does not add shell config, install packages, or run any skill code.
