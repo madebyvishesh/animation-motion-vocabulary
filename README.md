@@ -86,6 +86,12 @@ The installer copies the skill folder into the selected skills directory. It doe
 
 On Windows, `~` maps to your user profile (`%USERPROFILE%`).
 
+> **TLS note for older Windows:** If the PowerShell command fails with a TLS or SSL error, your system may default to an older TLS version. Prepend the fix:
+> ```powershell
+> powershell -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072; & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) claude"
+> ```
+> PowerShell 7 (`pwsh`) users can use the same commands — replace `powershell` with `pwsh`.
+
 ## Where it installs
 
 | Agent | Path |
@@ -105,19 +111,53 @@ Claude Code skills documentation: <https://code.claude.com/docs/en/skills>
 
 ## How to use it
 
-Just describe what you want. The skill triggers automatically on motion-related language:
+The skill works in three modes depending on what you say.
+
+### Describe mode (most common)
+
+Describe the motion you want in plain words. The skill triggers automatically:
 
 ```
 Make the pricing cards appear one by one as I scroll.
 ```
 
-The agent will map that to `stagger` + `scroll reveal`, show you the refined prompt, and wait for your confirmation before writing anything.
+The agent maps that to `stagger` + `scroll reveal`, shows you the refined prompt, and waits for your confirmation. When you say "yes" or "go ahead", it implements.
 
-You can also call it explicitly:
+You can also call it explicitly to make sure it activates:
 
 ```
 /animation-motion-vocabulary  make this feel more alive
 ```
+
+### Identify mode
+
+Point at existing code or a running animation and ask what it is:
+
+```
+What's this animation called? [pastes code]
+```
+
+```
+I see items fading in one by one — what technique is this?
+```
+
+The agent names the term and explains it.
+
+### Audit mode
+
+Ask it to review your existing animations for problems:
+
+```
+Audit my animations — are there any performance issues?
+```
+
+```
+Check this component's motion. Does anything feel off?
+```
+
+It scans for jank-causing properties, bad easing choices, missing `prefers-reduced-motion`, and timing issues — and reports findings by severity.
+
+---
 
 **Phrase → term quick reference:**
 

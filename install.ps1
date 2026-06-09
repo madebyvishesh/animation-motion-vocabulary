@@ -9,6 +9,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Ensure TLS 1.2 for GitHub connections on older Windows / PowerShell 5.1 systems
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072
+
 $SkillName = "animation-motion-vocabulary"
 $Repo = "madebyvishesh/animation-motion-vocabulary"
 $Ref = if ($env:ANIMATION_VOCAB_REF) { $env:ANIMATION_VOCAB_REF } else { "main" }

@@ -35,6 +35,8 @@ Is this what you meant? Or should I adjust it?
 
 This applies even when the mapping seems obvious. The goal is to surface your interpretation, teach the vocabulary, and give the user a precise prompt they can reuse or redirect.
 
+If the user replies with "yes", "go", "do it", "go ahead", "that's right", "correct", "sounds good", or any clear confirmation, proceed directly to implementation — do not repeat the confirmation block.
+
 **Examples of how to respond:**
 
 User: "Make the cards cascade in"
@@ -77,6 +79,47 @@ When two terms would produce noticeably different results, name both and explain
 **Which did you mean?**
 ```
 
+## Reverse Lookup
+
+When the user points at existing code or a running animation and asks what it is called ("what is this animation?", "what technique is this?", "what's this called?"), identify the closest term from the glossary and explain it briefly.
+
+Reply shape:
+
+```
+**This is:** `<term>`
+<one sentence explaining what defines this technique and why it fits what you're looking at>
+```
+
+Example:
+
+User: "What's this called?" (points at items fading in one after another)
+```
+**This is:** `stagger`
+Items are animated sequentially with a small delay between each one, creating the cascade effect you see.
+```
+
+## Animation Audit
+
+When the user asks to review, check, or audit their animations ("check my animations", "audit this", "what's wrong with my motion?", "is this performant?"), scan the code and report findings in three tiers:
+
+**Critical — causes jank or dropped frames:**
+- Properties being animated other than `transform` and `opacity` (width, height, top, left, margin, padding, border-radius on large elements). Flag each and suggest the `transform` equivalent.
+- Animating the same property in a loop at high frequency without `will-change`.
+
+**Moderate — feels off to users:**
+- `linear` easing on UI elements that are not spinners, progress bars, or marquees.
+- `ease-in` on entrances — starts slow, feels sluggish.
+- Exit animations that are longer than entrance animations (exits should be snappier).
+- Durations over 400ms on frequently repeated elements (tooltips, dropdowns, hover states).
+- Looping ambient motion (float, pulse, marquee) without a `prefers-reduced-motion` fallback.
+
+**Polish — noticeable if you know what to look for:**
+- Missing `prefers-reduced-motion` handling anywhere motion is non-trivial.
+- Stagger delays that are too long (over 80ms per item) on lists with more than 6 items — the last item takes too long to arrive.
+- Springs with very low damping on productivity UI — bouncy feels wrong in tools.
+
+Format the output as a prioritised checklist. Only report tiers that have findings.
+
 ## Motion Selection
 
 Choose motion by purpose:
@@ -100,6 +143,32 @@ Use springs when the motion should feel physical, interruptible, draggable, or m
 Respect `prefers-reduced-motion`. Reduce distance, remove parallax/3D/looping motion, or switch to fades where appropriate.
 
 For repeated or productivity UI, make animations shorter and subtler. For expressive marketing, onboarding, games, or playful product moments, richer motion is acceptable if it still serves orientation or feedback.
+
+Duration reference:
+
+| Animation type | Range |
+| --- | --- |
+| Micro-feedback (button press, hover, ripple) | 80–150ms |
+| Entrance (modal, dropdown, tooltip appearing) | 150–300ms |
+| Exit (same elements disappearing) | 100–200ms — exits should feel snappier than entrances |
+| State transition (tab switch, accordion, crossfade) | 200–350ms |
+| Page / route transition | 250–400ms |
+| Emphasis (shake, pulse, draw attention) | 300–500ms |
+| Ambient / looping (float, marquee, orbit) | 1500ms+ — slow enough to feel calm |
+
+When in doubt, go shorter. Users notice slow more than fast.
+
+## Framework Hints
+
+When the project stack is identifiable, suggest the right tool:
+
+- **React**: Framer Motion for layout animation, shared element transitions, gesture-driven motion, and springs. CSS transitions for simple hover/focus states. React Spring as an alternative when only springs are needed.
+- **Vue**: `@vueuse/motion` or Vue's built-in `<Transition>` and `<TransitionGroup>`. TransitionGroup handles list stagger well.
+- **Plain HTML/CSS**: CSS `@keyframes` and `transition` for most cases. Web Animations API (WAAPI) when you need JS control. View Transitions API for page and shared element transitions in supported browsers.
+- **React Native**: Reanimated 3 for gesture-driven motion, layout animation, and anything needing the UI thread. The built-in `Animated` API for simple, non-gesture cases.
+- **Svelte**: Built-in `transition:` and `animate:` directives handle most cases. `svelte/motion` tweened and spring stores for values.
+
+If the stack is unknown, give framework-agnostic guidance using CSS property names and motion terms. Do not assume a library.
 
 ## Reference
 
