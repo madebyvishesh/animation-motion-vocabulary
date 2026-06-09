@@ -4,7 +4,8 @@ set -euo pipefail
 SKILL_NAME="animation-motion-vocabulary"
 REPO="madebyvishesh/animation-motion-vocabulary"
 REF="${ANIMATION_VOCAB_REF:-main}"
-SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_PATH="${BASH_SOURCE[0]-$0}"
+SOURCE_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" 2>/dev/null && pwd || pwd)"
 SKILL_DIR="${SOURCE_DIR}/${SKILL_NAME}"
 TMP_DIR=""
 
