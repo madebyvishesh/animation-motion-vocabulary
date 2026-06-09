@@ -15,32 +15,67 @@ Keep the detailed glossary in `references/animation-motion-vocabulary.md` as the
 
 ## Term Matching
 
-When the user names a term, use that term directly and apply its meaning from the glossary.
+When the user names a term exactly, use it directly and apply its meaning from the glossary. Skip the confirmation step and implement.
 
-When the user describes an effect without naming it:
+When the user describes an effect without naming it — including vague phrases like "snappy", "smooth", "cascade", "feels alive", "like iOS", "roll up", "avoid jank" — always do the following **before writing any code**:
 
-1. Infer the closest term if the intent is clear.
-2. Briefly name the term back to the user before or while implementing it.
-3. Ask for confirmation only when two or more terms would produce noticeably different behavior.
+1. Identify the closest animation term(s) from the glossary.
+2. Reply with a structured confirmation block in this exact shape:
 
-Use this confirmation shape when needed:
+```
+**Mapped to:** `<term>` [+ `<term2>` if multiple]
+<one sentence explaining what this term means and why it fits>
 
-```text
-That sounds like a shared element transition: the same item travels and transforms between states. Is that what you mean, or do you want a simpler crossfade?
+**Refined prompt:** "<rewrite the user's request using the exact animation vocabulary, specific enough to implement>"
+
+Is this what you meant? Or should I adjust it?
 ```
 
-Do not interrupt implementation for obvious mappings. For example:
+3. Wait for the user to confirm or correct before writing any code or making any changes.
 
-- "Make cards appear as I scroll" -> scroll reveal.
-- "Make the list items come in one by one" -> stagger.
-- "Make it appear with a little bounce" -> pop in or spring bounce.
-- "The modal should grow from the button" -> origin-aware animation with transform-origin set near the trigger.
-- "The product image should open into the details page" -> shared element transition.
-- "Make the button feel pressed" -> press/tap feedback.
-- "This should feel snappy, not robotic" -> ease-out or spring with higher stiffness and enough damping.
-- "The number should roll up" -> number ticker with tabular numbers.
-- "The list should rearrange smoothly" -> drag to reorder plus layout animation.
-- "It stutters" or "feels laggy" -> investigate jank, layout thrashing, compositing, and animated properties.
+This applies even when the mapping seems obvious. The goal is to surface your interpretation, teach the vocabulary, and give the user a precise prompt they can reuse or redirect.
+
+**Examples of how to respond:**
+
+User: "Make the cards cascade in"
+```
+**Mapped to:** `stagger`
+Each card enters one after another with a small delay between them, creating a cascade effect.
+
+**Refined prompt:** "Animate the cards with a stagger entrance — fade + slide up, ~60ms delay between each item."
+
+Is this what you meant? Or should I adjust it?
+```
+
+User: "The modal should grow from the button"
+```
+**Mapped to:** `origin-aware animation`
+The modal scales up from the button's position rather than from its own center, so it feels like it comes out of the trigger.
+
+**Refined prompt:** "Animate the modal open with a scale-in that uses the trigger button's position as the transform-origin."
+
+Is this what you meant? Or should I adjust it?
+```
+
+User: "It stutters when I scroll"
+```
+**Mapped to:** `jank` → likely `layout thrashing` or missing `compositing`
+Stutter during scroll usually means the browser is recalculating layout every frame, or the animated element isn't on its own GPU layer.
+
+**Refined prompt:** "Investigate scroll jank: check for layout-thrashing properties (width, height, top, left), ensure animated elements use transform/opacity only, and add will-change where appropriate."
+
+Is this what you meant? Or should I adjust it?
+```
+
+When two terms would produce noticeably different results, name both and explain the difference before asking:
+
+```
+**Could be:** `shared element transition` or `crossfade`
+- Shared element: the thumbnail physically travels and morphs into the detail card across the screen.
+- Crossfade: the thumbnail fades out while the detail card fades in at its own position.
+
+**Which did you mean?**
+```
 
 ## Motion Selection
 
