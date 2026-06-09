@@ -16,6 +16,10 @@ The core vocabulary comes from [Animation Vocabulary](https://animations.dev/voc
 
 ## Install
 
+Run these in your terminal. Do not paste them into the agent chat.
+
+macOS, Linux, WSL, or Git Bash:
+
 Codex:
 
 ```bash
@@ -40,7 +44,29 @@ Custom skills directory:
 curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- custom /path/to/skills
 ```
 
+Windows PowerShell:
+
+Codex:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) codex"
+```
+
+Claude Code:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) claude"
+```
+
+Both:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) all"
+```
+
 The installer copies the skill folder into the selected skills directory. It does not add shell config, install packages, or run any skill code.
+
+On Windows, `~` maps to your user profile. Claude documents `~/.claude` as `%USERPROFILE%\.claude` on Windows.
 
 ## Manual Install
 
@@ -57,6 +83,14 @@ Then install locally:
 ./install.sh codex
 ./install.sh claude
 ./install.sh all
+```
+
+On Windows:
+
+```powershell
+.\install.ps1 codex
+.\install.ps1 claude
+.\install.ps1 all
 ```
 
 Or copy the folder yourself:
@@ -86,8 +120,8 @@ After installing, start a new agent session if the skill does not show up immedi
 
 | Agent | Install path |
 | --- | --- |
-| Codex | `~/.codex/skills/animation-motion-vocabulary/` |
-| Claude Code, personal | `~/.claude/skills/animation-motion-vocabulary/` |
+| Codex | `~/.codex/skills/animation-motion-vocabulary/` or `%USERPROFILE%\.codex\skills\animation-motion-vocabulary\` |
+| Claude Code, personal | `~/.claude/skills/animation-motion-vocabulary/` or `%USERPROFILE%\.claude\skills\animation-motion-vocabulary\` |
 | Claude Code, project | `.claude/skills/animation-motion-vocabulary/` |
 | Other agents | Wherever that agent loads `SKILL.md` folders |
 
@@ -164,6 +198,7 @@ It also gives implementation preferences: use `transform` and `opacity` where po
 ├── LICENSE
 ├── NOTICE.md
 ├── install.sh
+├── install.ps1
 ├── animation-motion-vocabulary.md
 └── animation-motion-vocabulary/
     ├── SKILL.md
