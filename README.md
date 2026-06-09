@@ -2,7 +2,7 @@
 
 An installable agent skill for UI animation language.
 
-It helps coding agents understand requests like:
+You describe motion in plain words:
 
 - "make it feel snappy"
 - "make the cards cascade in"
@@ -10,151 +10,118 @@ It helps coding agents understand requests like:
 - "make the number roll up"
 - "this animation feels laggy"
 
-Instead of guessing, the agent can map those phrases to motion terms like `stagger`, `spring`, `ease-out`, `origin-aware animation`, `shared element transition`, `scroll reveal`, `number ticker`, `shimmer`, or `jank`.
+The agent maps those phrases to precise animation terms, shows you exactly what it understood, and confirms with you before writing any code.
 
-The core vocabulary comes from [Animation Vocabulary](https://animations.dev/vocabulary) by [Emil Kowalski](https://x.com/emilkowalski_). This repo packages it as a portable `SKILL.md` folder and adds agent-specific guidance for fuzzy matching, clarification, and implementation.
+The core vocabulary comes from [Animation Vocabulary](https://animations.dev/vocabulary) by [Emil Kowalski](https://x.com/emilkowalski_). This repo packages it as a portable `SKILL.md` folder and adds agent-specific guidance for phrase matching, confirmation, and implementation.
+
+## What to expect
+
+When you describe motion in plain words, the agent replies with a confirmation block before doing anything:
+
+```
+**Mapped to:** `stagger`
+Each card enters one after another with a small delay between them, creating a cascade effect.
+
+**Refined prompt:** "Animate the cards with a stagger entrance — fade + slide up, ~60ms delay between each item."
+
+Is this what you meant? Or should I adjust it?
+```
+
+You confirm, correct, or redirect — then it implements. No code is written until you agree on what the animation actually is.
+
+When a phrase could mean two meaningfully different things, it names both and explains the difference:
+
+```
+**Could be:** `shared element transition` or `crossfade`
+- Shared element: the thumbnail physically travels and morphs into the detail card.
+- Crossfade: the thumbnail fades out while the detail card fades in at its own position.
+
+Which did you mean?
+```
 
 ## Install
 
-Run these in your terminal. Do not paste them into the agent chat.
+> Run these commands in your terminal. Do not paste them into the agent chat.
 
-macOS, Linux, WSL, or Git Bash:
+### macOS / Linux / WSL / Git Bash
 
-Codex:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- codex
-```
-
-Claude Code:
-
+**Claude Code:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- claude
 ```
 
-Both:
+**Codex:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- codex
+```
 
+**Both at once:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- all
 ```
 
-Custom skills directory:
-
+**Custom skills directory:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.sh | bash -s -- custom /path/to/skills
 ```
 
-Windows PowerShell:
+### Windows (PowerShell)
 
-Codex:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) codex"
-```
-
-Claude Code:
-
+**Claude Code:**
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) claude"
 ```
 
-Both:
+**Codex:**
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) codex"
+```
 
+**Both at once:**
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/madebyvishesh/animation-motion-vocabulary/refs/heads/main/install.ps1'))) all"
 ```
 
-The installer copies the skill folder into the selected skills directory. It does not add shell config, install packages, or run any skill code.
+The installer copies the skill folder into the selected skills directory. It does not touch shell config, install packages, or run any skill code.
 
-On Windows, `~` maps to your user profile. Claude documents `~/.claude` as `%USERPROFILE%\.claude` on Windows.
+On Windows, `~` maps to your user profile (`%USERPROFILE%`).
 
-## Manual Install
+## Where it installs
 
-Clone the repo:
-
-```bash
-git clone https://github.com/madebyvishesh/animation-motion-vocabulary.git
-cd animation-motion-vocabulary
-```
-
-Then install locally:
-
-```bash
-./install.sh codex
-./install.sh claude
-./install.sh all
-```
-
-On Windows:
-
-```powershell
-.\install.ps1 codex
-.\install.ps1 claude
-.\install.ps1 all
-```
-
-Or copy the folder yourself:
-
-```bash
-mkdir -p ~/.codex/skills
-cp -R animation-motion-vocabulary ~/.codex/skills/
-```
-
-For Claude Code personal skills:
-
-```bash
-mkdir -p ~/.claude/skills
-cp -R animation-motion-vocabulary ~/.claude/skills/
-```
-
-For Claude Code project skills:
-
-```bash
-mkdir -p .claude/skills
-cp -R animation-motion-vocabulary .claude/skills/
-```
-
-After installing, start a new agent session if the skill does not show up immediately.
-
-## Where It Installs
-
-| Agent | Install path |
+| Agent | Path |
 | --- | --- |
-| Codex | `~/.codex/skills/animation-motion-vocabulary/` or `%USERPROFILE%\.codex\skills\animation-motion-vocabulary\` |
-| Claude Code, personal | `~/.claude/skills/animation-motion-vocabulary/` or `%USERPROFILE%\.claude\skills\animation-motion-vocabulary\` |
-| Claude Code, project | `.claude/skills/animation-motion-vocabulary/` |
+| Claude Code — personal | `~/.claude/skills/animation-motion-vocabulary/` |
+| Claude Code — project | `.claude/skills/animation-motion-vocabulary/` |
+| Codex | `~/.codex/skills/animation-motion-vocabulary/` |
 | Other agents | Wherever that agent loads `SKILL.md` folders |
 
-The important part is that the final path contains:
+The critical file is:
 
-```text
+```
 animation-motion-vocabulary/SKILL.md
 ```
 
-Claude Code documents personal and project skills here: <https://code.claude.com/docs/en/skills>
+Claude Code skills documentation: <https://code.claude.com/docs/en/skills>
 
-## How To Use It
+## How to use it
 
-You can call it directly:
+Just describe what you want. The skill triggers automatically on motion-related language:
 
-```text
-Use $animation-motion-vocabulary to make this interface motion feel smoother and more intentional.
 ```
-
-You can also just describe the motion you want:
-
-```text
 Make the pricing cards appear one by one as I scroll.
 ```
 
-The skill tells the agent to recognize that as:
+The agent will map that to `stagger` + `scroll reveal`, show you the refined prompt, and wait for your confirmation before writing anything.
 
-- `stagger`: one item after another
-- `scroll reveal`: animation triggered as items enter the viewport
+You can also call it explicitly:
 
-More examples:
+```
+/animation-motion-vocabulary  make this feel more alive
+```
 
-| User phrase | Likely animation term |
+**Phrase → term quick reference:**
+
+| What you say | What it maps to |
 | --- | --- |
 | "Make it feel snappy" | `ease-out` or a well-damped `spring` |
 | "Make the list cascade in" | `stagger` |
@@ -167,28 +134,64 @@ More examples:
 | "It stutters when I scroll" | `jank`, `dropped frames`, or `layout thrashing` |
 | "Make it feel like iOS overscroll" | `rubber-banding` |
 
-When a request could mean two different things, the skill nudges the agent to ask a tight clarification:
+## What the skill teaches
 
-```text
-That sounds like a shared element transition: the same item travels and transforms between states. Is that what you mean, or do you want a simpler crossfade?
+- **Entrances and exits:** fade, slide, scale, pop, reveal
+- **Sequencing and timing:** keyframes, tween, stagger, orchestration, duration
+- **Movement and transforms:** translate, scale, rotate, skew, perspective, transform origin
+- **State transitions:** crossfade, morph, shared element transition, layout animation
+- **Scroll motion:** scroll reveal, scroll-driven animation, parallax, page and view transitions
+- **Interaction feedback:** hover, tap feedback, hold to confirm, drag, swipe, ripple, shake
+- **Easing and springs:** ease-out, cubic-bezier, stiffness, damping, mass, bounce, momentum
+- **Ambient motion:** marquee, loop, yoyo, pulse, float, shimmer, ticker, typewriter
+- **Performance:** FPS, jank, dropped frames, compositing, `will-change`, layout thrashing
+- **Motion principles:** purposeful animation, anticipation, follow-through, spatial consistency, reduced motion
+
+Implementation preferences: use `transform` and `opacity` for animated properties, avoid layout-heavy animation for repeated motion, and respect `prefers-reduced-motion`.
+
+## Manual install
+
+Clone and run the installer locally:
+
+```bash
+git clone https://github.com/madebyvishesh/animation-motion-vocabulary.git
+cd animation-motion-vocabulary
+./install.sh claude   # or codex, or all
 ```
 
-## What The Skill Teaches
+On Windows:
+```powershell
+.\install.ps1 claude
+```
 
-The vocabulary covers:
+Or copy the folder yourself:
 
-- Entrances and exits: fade, slide, scale, pop, reveal
-- Sequencing and timing: keyframes, tweening, stagger, orchestration, duration
-- Movement and transforms: translate, scale, rotate, skew, perspective, transform origin
-- Transitions between states: crossfade, morph, shared element transition, layout animation
-- Scroll motion: scroll reveal, scroll-driven animation, parallax, page and view transitions
-- Interaction feedback: hover, tap feedback, hold to confirm, drag, swipe, ripple, shake
-- Easing and springs: ease-out, cubic-bezier, stiffness, damping, mass, bounce, momentum
-- Ambient motion and effects: marquee, loop, yoyo, pulse, float, shimmer, ticker, typewriter
-- Performance language: FPS, jank, dropped frames, compositing, `will-change`, layout thrashing
-- Motion principles: purposeful animation, anticipation, follow-through, spatial consistency, reduced motion
+```bash
+# Claude Code — personal
+mkdir -p ~/.claude/skills
+cp -R animation-motion-vocabulary ~/.claude/skills/
 
-It also gives implementation preferences: use `transform` and `opacity` where possible, avoid layout-heavy animation for repeated motion, and respect `prefers-reduced-motion`.
+# Claude Code — project (run from your project root)
+mkdir -p .claude/skills
+cp -R animation-motion-vocabulary .claude/skills/
+
+# Codex
+mkdir -p ~/.codex/skills
+cp -R animation-motion-vocabulary ~/.codex/skills/
+```
+
+After installing, start a new agent session if the skill does not show up immediately.
+
+## Updating
+
+Pull the latest and run the installer again:
+
+```bash
+git pull
+./install.sh claude
+```
+
+For curl installs, rerun the same command you used originally.
 
 ## Files
 
@@ -197,47 +200,30 @@ It also gives implementation preferences: use `transform` and `opacity` where po
 ├── README.md
 ├── LICENSE
 ├── NOTICE.md
+├── CONTRIBUTING.md
+├── SECURITY.md
 ├── install.sh
 ├── install.ps1
-├── animation-motion-vocabulary.md
-└── animation-motion-vocabulary/
-    ├── SKILL.md
+├── animation-motion-vocabulary.md        ← standalone human-readable glossary
+└── animation-motion-vocabulary/          ← the skill folder agents load
+    ├── SKILL.md                          ← agent entry point
     ├── agents/
-    │   └── openai.yaml
+    │   └── openai.yaml                   ← optional Codex UI metadata
     └── references/
-        └── animation-motion-vocabulary.md
+        └── animation-motion-vocabulary.md ← full glossary the agent reads
 ```
-
-`animation-motion-vocabulary/SKILL.md` is the entry point agents load.
-
-`animation-motion-vocabulary/references/animation-motion-vocabulary.md` is the longer glossary the agent can read when it needs detail.
-
-`animation-motion-vocabulary.md` is a standalone Markdown version for humans.
-
-`agents/openai.yaml` is optional Codex UI metadata.
-
-## Updating
-
-Pull the latest repo and run the installer again:
-
-```bash
-git pull
-./install.sh codex
-```
-
-For the curl install path, rerun the same command you used originally.
 
 ## Security
 
 This is an instruction-only skill. There are no skill scripts, package installs, network calls, or hidden runtime dependencies.
 
-Still, read any skill before installing it. Skills shape how an agent behaves, and future forks may add scripts or permissions.
+Read any skill before installing it. Skills shape how an agent behaves, and future forks may add scripts or permissions.
 
 ## Credit
 
 Original vocabulary: [Animation Vocabulary](https://animations.dev/vocabulary) by [Emil Kowalski](https://x.com/emilkowalski_).
 
-This repository adapts that vocabulary into a portable agent skill with install instructions, fuzzy phrase matching, and implementation guidance.
+This repository adapts that vocabulary into a portable agent skill with install instructions, phrase matching, confirm-first behavior, and implementation guidance.
 
 Please keep the attribution when sharing or adapting the skill.
 
