@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 SKILL_NAME="animation-motion-vocabulary"
 REPO="madebyvishesh/animation-motion-vocabulary"
 REF="${ANIMATION_VOCAB_REF:-main}"
-SCRIPT_PATH="${BASH_SOURCE[0]-$0}"
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
 SOURCE_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" 2>/dev/null && pwd || pwd)"
 SKILL_DIR="${SOURCE_DIR}/${SKILL_NAME}"
 TMP_DIR=""
+
+set -u
 
 cleanup() {
   if [[ -n "${TMP_DIR}" && -d "${TMP_DIR}" ]]; then
